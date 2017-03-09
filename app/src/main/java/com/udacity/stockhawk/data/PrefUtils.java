@@ -3,6 +3,7 @@ package com.udacity.stockhawk.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
 
@@ -10,12 +11,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.udacity.stockhawk.Utils.isNetworkAvailable;
+import static com.udacity.stockhawk.Utils.isValidStock;
+
 public final class PrefUtils
 {
+    private PrefUtils() {}
 
-    private PrefUtils() {
-    }
-
+    /** Returns the stock symbols stored in preferences */
     public static Set<String> getStocks(Context context)
     {
         String stocksKey = context.getString(R.string.pref_stocks_key);
@@ -40,6 +43,7 @@ public final class PrefUtils
 
     }
 
+    /** Updates the preferences with a new stock symbol */
     private static void editStockPref(Context context, String symbol, Boolean add)
     {
         String key = context.getString(R.string.pref_stocks_key);
@@ -47,7 +51,7 @@ public final class PrefUtils
 
         if (add)
         {
-            stocks.add(symbol);
+            stocks.add(symbol.trim());
         }
         else
         {
@@ -60,10 +64,19 @@ public final class PrefUtils
         editor.apply();
     }
 
+    /** add new stock to the pref, this is the public method that accesses the one above */
     public static void addStock(Context context, String symbol)
     {
+        // if stock symbol is not valid, don't put it into pref, and bail out early
+        if(!isValidStock(symbol.trim()) && isNetworkAvailable(context))
+        {
+            String message = context.getString(R.string.error_nonvalid_stock, symbol);
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            return;
+        }
         editStockPref(context, symbol, true);
     }
+
 
     public static void removeStock(Context context, String symbol)
     {
@@ -101,5 +114,6 @@ public final class PrefUtils
 
         editor.apply();
     }
+
 
 }

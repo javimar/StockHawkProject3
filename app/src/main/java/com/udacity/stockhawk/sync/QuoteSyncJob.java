@@ -6,9 +6,9 @@ import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.widget.Toast;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 
@@ -28,26 +28,24 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 import yahoofinance.quotes.stock.StockQuote;
 
+import static com.udacity.stockhawk.Utils.isNetworkAvailable;
+
 public final class QuoteSyncJob
 {
-
     private static final int ONE_OFF_ID = 2;
     private static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
     private static final int PERIOD = 300000;
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
-    private static final int YEARS_OF_HISTORY = 2;
+    private static final int YEARS_OF_HISTORY = 1;
 
-    private QuoteSyncJob() {
-    }
+    private QuoteSyncJob() {}
 
     static void getQuotes(Context context)
     {
-
-        Timber.d("Running sync job");
-
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
+        // get quote from 2 years of history
         from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
 
         try
@@ -57,56 +55,71 @@ public final class QuoteSyncJob
             stockCopy.addAll(stockPref);
             String[] stockArray = stockPref.toArray(new String[stockPref.size()]);
 
-            Timber.d(stockCopy.toString());
-
             if (stockArray.length == 0)
             {
                 return;
             }
 
+            /**
+             * Sends a basic quotes request to Yahoo Finance. This will return a Map object
+             * that links the symbols to their respective Stock objects. The Stock objects
+             * have their StockQuote, StockStats and StockDividend member fields filled in
+             * with the available data.
+             */
             Map<String, Stock> quotes = YahooFinance.get(stockArray);
             Iterator<String> iterator = stockCopy.iterator();
 
-            Timber.d(quotes.toString());
-
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
 
-            while (iterator.hasNext()) {
+            while (iterator.hasNext())
+            {
                 String symbol = iterator.next();
 
-
                 Stock stock = quotes.get(symbol);
-                StockQuote quote = stock.getQuote();
+                String stock_name = stock.getName();
+                // check if it is a valid one
+                if(null != stock_name)
+                {
+                    StockQuote quote = stock.getQuote();
 
-                float price = quote.getPrice().floatValue();
-                float change = quote.getChange().floatValue();
-                float percentChange = quote.getChangeInPercent().floatValue();
+                    float price = quote.getPrice().floatValue();
+                    float change = quote.getChange().floatValue();
+                    float percentChange = quote.getChangeInPercent().floatValue();
 
-                // WARNING! Don't request historical data for a stock that doesn't exist!
-                // The request will hang forever X_x
-                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
+                    // WARNING! Don't request historical data for a stock that doesn't exist!
+                    // The request will hang forever X_x
+                    List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
 
-                StringBuilder historyBuilder = new StringBuilder();
+                    StringBuilder historyBuilder = new StringBuilder();
 
-                for (HistoricalQuote it : history) {
+                    for (HistoricalQuote it : history) {
 
-                    historyBuilder.append(it.getDate().getTimeInMillis());
-                    historyBuilder.append(", ");
-                    historyBuilder.append(it.getClose());
-                    historyBuilder.append("\n");
+                        historyBuilder.append(it.getDate().getTimeInMillis());
+                        historyBuilder.append(",");
+                        historyBuilder.append(it.getClose());
+                        historyBuilder.append("\n");
+                    }
+
+                    ContentValues quoteCV = new ContentValues();
+                    quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
+                    quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
+                    quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
+                    quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
+
+                    quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+
+                    quoteCV.put(Contract.Quote.COLUMN_NAME, stock_name);
+
+                    quoteCVs.add(quoteCV);
                 }
-
-                ContentValues quoteCV = new ContentValues();
-                quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
-                quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
-                quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
-                quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-
-
-                quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
-
-                quoteCVs.add(quoteCV);
-
+                else
+                {
+                    // bad stock, delete it from preferences and warn user
+                    String message = context
+                            .getString(R.string.error_nonvalid_stock_async, symbol);
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                    PrefUtils.removeStock(context, symbol);
+                }
             }
 
             context.getContentResolver()
@@ -117,17 +130,16 @@ public final class QuoteSyncJob
             Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
             context.sendBroadcast(dataUpdatedIntent);
 
-        } catch (IOException exception) {
+        }
+        catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
         }
     }
 
     private static void schedulePeriodic(Context context)
     {
-        Timber.d("Scheduling a periodic task");
-
-
-        JobInfo.Builder builder = new JobInfo.Builder(PERIODIC_ID, new ComponentName(context, QuoteJobService.class));
+        JobInfo.Builder builder = new JobInfo.Builder(PERIODIC_ID,
+                new ComponentName(context, QuoteJobService.class));
 
 
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
@@ -135,7 +147,8 @@ public final class QuoteSyncJob
                 .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
 
 
-        JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        JobScheduler scheduler = (JobScheduler) context
+                .getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
         scheduler.schedule(builder.build());
     }
@@ -150,10 +163,7 @@ public final class QuoteSyncJob
 
     public static synchronized void syncImmediately(Context context)
     {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting())
+        if (isNetworkAvailable(context))
         {
             Intent nowIntent = new Intent(context, QuoteIntentService.class);
             context.startService(nowIntent);
@@ -166,13 +176,10 @@ public final class QuoteSyncJob
             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                     .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
 
-
             JobScheduler scheduler = (JobScheduler)
                     context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
             scheduler.schedule(builder.build());
-
-
         }
     }
 
