@@ -17,7 +17,7 @@
 
 
     <!-- our detail accent colors -->
-    <color name="detail_accent_pane_background">#455A64</color>
+    <color name="detail_accent_pane_background">#607d8b</color>
     <color name="detail_accent_label">#90A4AE</color>
 
     <!-- the activated state color -->

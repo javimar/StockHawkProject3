@@ -1,60 +1,53 @@
-<!-- Detail Layout for Grid -->
-<android.support.v7.widget.GridLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_additional_pane"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="2"
+    android:layout_height="match_parent"
     android:background="@color/detail_accent_pane_background"
-    android:paddingBottom="@dimen/abc_list_item_padding_horizontal_material"
     android:paddingEnd="32dp"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
-    android:paddingStart="32dp"
-    tools:ignore="PrivateResource"
-    android:paddingTop="@dimen/abc_list_item_padding_horizontal_material"
-    app:columnCount="4">
-
-    <TextView
-        android:id="@+id/tv_symbol"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textColor="@color/detail_accent_label"
-        app:layout_columnWeight="1"
-        app:layout_gravity="fill"
-        app:layout_rowWeight="1"
-        tools:text="YHOO" />
-
-    <TextView
-        android:id="@+id/tv_stock_name"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@android:color/white"
-        app:layout_gravity="fill"
-        tools:text="Yahoo Inc" />
-
-    <TextView
-        android:id="@+id/tv_price_label"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textColor="@color/detail_accent_label"
-        app:layout_columnWeight="1"
-        app:layout_gravity="fill"
-        app:layout_rowWeight="1"
-        tools:text="YHOO" />
+    android:paddingStart="32dp" >
 
     <TextView
         android:id="@+id/tv_price"
-        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/primary_text"
+        android:textSize="50sp"
+        app:layout_gravity="fill_horizontal"
+        tools:text="$ 933.31"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="24dp" />
+    <TextView
+        android:id="@+id/tv_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="+0.20 (+2,23%)"
+        android:layout_below="@+id/tv_price"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tv_stock_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@android:color/black"
-        app:layout_gravity="fill"
-        tools:text="45,99" />
+        android:textColor="@android:color/white"
+        tools:text="Yahoo Inc"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/tv_change"/>
 
-
-</android.support.v7.widget.GridLayout>
+</RelativeLayout>
 

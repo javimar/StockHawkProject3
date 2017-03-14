@@ -14,15 +14,16 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.HistoryEntries;
-import com.udacity.stockhawk.data.MyXaxisDateFormatter;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -41,7 +42,6 @@ public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>
 {
     private String mSymbol;
-    @BindView(R.id.tv_symbol)TextView mTvSymbol;
     @BindView(R.id.tv_stock_name)TextView mTvName;
     @BindView(R.id.tv_price)TextView mTvPrice;
     @BindView(R.id.tv_change)TextView mTvChange;
@@ -119,7 +119,6 @@ public class DetailActivity extends AppCompatActivity implements
             percentageFormat.setMinimumFractionDigits(2);
             percentageFormat.setPositivePrefix("+");
 
-            mTvSymbol.setText(mSymbol);
             mTvName.setText(cursor.getString(Quote.POSITION_NAME));
             getSupportActionBar().setSubtitle(cursor.getString(Quote.POSITION_NAME));
             mTvPrice.setText(priceFormat.format(cursor.getDouble(Quote.POSITION_PRICE)));
@@ -156,27 +155,35 @@ public class DetailActivity extends AppCompatActivity implements
 
     private void setChart()
     {
-        String[] datesList = new String[mHistoryEntries.size()];
-        ArrayList<Entry> yVals = new ArrayList<>();
+        List<Entry> entries = new ArrayList<>();
 
         for (int i = 0; i < mHistoryEntries.size(); i++)
         {
-            datesList[i] = mHistoryEntries.get(i).getmDate();
-            yVals.add(new Entry(mHistoryEntries.get(i).getmPrice(), i));
+            entries.add(new Entry(i, mHistoryEntries.get(i).getmPrice()));
         }
 
+        // interface to return the value of the formatted date for each index
+        IAxisValueFormatter formatter = new IAxisValueFormatter()
+        {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis)
+            {
+                // This will return the formatted date for the corresponding index
+                return mHistoryEntries.get((int) value).getmDate();
+            }
+        };
+
         XAxis xAxis = mStockChart.getXAxis();
-        xAxis.setValueFormatter(new MyXaxisDateFormatter(datesList));
+        xAxis.setValueFormatter(formatter);
         xAxis.setTextSize(12f);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
 
         YAxis yAxis = mStockChart.getAxis(YAxis.AxisDependency.LEFT);
         yAxis.setTextSize(12f);
         yAxis.setTextColor(Color.BLUE);
 
-        LineDataSet dataSet = new LineDataSet(yVals, "Stock history");
+        LineDataSet dataSet = new LineDataSet(entries, "Stock history");
         LineData lineData = new LineData(dataSet);
         mStockChart.setData(lineData);
         mStockChart.invalidate(); // refresh

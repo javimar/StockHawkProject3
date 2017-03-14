@@ -1,57 +1,14 @@
 <!-- Detail Layout for Grid -->
-<android.support.v7.widget.GridLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
-    app:columnCount="2">
-
-    <android.support.v4.widget.Space
-        android:layout_height="16dp"
-        app:layout_columnSpan="2"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1" />
-
-    <TextView
-        android:id="@+id/tv_price"
-        android:layout_width="0dp"
-        android:fontFamily="sans-serif-light"
-        android:layout_marginStart="32dp"
-        android:gravity="start"
-        android:textColor="@color/primary_text"
-        android:textSize="50sp"
-        app:layout_columnWeight="1"
-        app:layout_columnSpan="2"
-        app:layout_gravity="fill_horizontal"
-        tools:text="$ 933.31" />
-    <TextView
-        android:id="@+id/tv_change"
-        android:layout_width="0dp"
-        android:layout_marginBottom="@dimen/abc_list_item_padding_horizontal_material"
-        android:fontFamily="sans-serif-light"
-        android:gravity="start"
-        android:layout_marginStart="32dp"
-        android:textColor="@color/secondary_text"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_columnSpan="2"
-        app:layout_columnWeight="1"
-        tools:text="+0.20 (+2,23%)" />
+    android:background="@android:color/white" >
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/stockChart"
-        app:layout_columnSpan="2"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        app:layout_gravity="fill_horizontal"/>
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
-    <android.support.v4.widget.Space
-        android:layout_height="16dp"
-        app:layout_columnSpan="2"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1" />
-
-</android.support.v7.widget.GridLayout>
+</FrameLayout>
 
