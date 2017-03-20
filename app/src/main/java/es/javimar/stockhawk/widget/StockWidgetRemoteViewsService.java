@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -130,9 +131,7 @@ public class StockWidgetRemoteViewsService extends RemoteViewsService
                 }
 
                 final Intent fillInIntent = new Intent();
-                Uri uri = makeUriForStock(symbol);
-                //Uri uri = Quote.URI;
-                fillInIntent.setData(uri);
+                fillInIntent.putExtra("stock", symbol);
                 views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
                 return views;
             }

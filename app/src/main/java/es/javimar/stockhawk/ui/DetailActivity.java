@@ -10,7 +10,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -73,7 +72,6 @@ public class DetailActivity extends AppCompatActivity implements
         collapsingToolbarLayout.setTitleEnabled(false);
 
         Bundle extras = getIntent().getExtras();
-
         if(extras != null)
         {
             mSymbol = extras.getString("stock");
