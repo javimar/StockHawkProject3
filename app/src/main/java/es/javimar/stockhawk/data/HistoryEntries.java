@@ -1,4 +1,4 @@
-package com.udacity.stockhawk.data;
+package es.javimar.stockhawk.data;
 
 
 public class HistoryEntries

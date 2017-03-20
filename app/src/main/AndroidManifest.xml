@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.udacity.stockhawk">
+    package="es.javimar.stockhawk">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -38,7 +38,7 @@
 
         <provider
             android:name=".data.StockProvider"
-            android:authorities="com.udacity.stockhawk"
+            android:authorities="es.javimar.stockhawk"
             android:exported="false" />
 
         <service
@@ -52,7 +52,7 @@
             android:label="@string/widget_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.udacity.stockhawk.ACTION_DATA_UPDATED" />
+                <action android:name="es.javimar.stockhawk.ACTION_DATA_UPDATED" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

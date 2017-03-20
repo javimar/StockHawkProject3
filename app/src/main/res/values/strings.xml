@@ -31,9 +31,18 @@
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
 
-    <string name="change_label">%1$s (%2$s)</string>
+    <string name="detail_change_label">%1$s (%2$s)</string>
+    <string name="detail_annualyield_label">Annual yield: %1$s</string>
+    <string name="detail_market_label">Market: %1$s</string>
+    <string name="detail_prevlose_label">Prev. close: %1$s</string>
+    <string name="detail_open_label">Open: %1$s</string>
+    <string name="detail_bid_label">Bid: %1$s</string>
 
     <string name="widget_title">Today\'s Market</string>
     <string name="widget_empty_list">No stocks available to view!</string>
+
+    <string name="char_title_oneyear">One year history</string>
+    <string name="char_name_points">Stock Value in USD</string>
+
 
 </resources>

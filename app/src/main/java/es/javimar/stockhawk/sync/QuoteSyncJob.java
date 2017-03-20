@@ -1,4 +1,4 @@
-package com.udacity.stockhawk.sync;
+package es.javimar.stockhawk.sync;
 
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -8,9 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.udacity.stockhawk.R;
-import com.udacity.stockhawk.data.Contract;
-import com.udacity.stockhawk.data.PrefUtils;
+import es.javimar.stockhawk.R;
+import es.javimar.stockhawk.data.Contract;
+import es.javimar.stockhawk.data.PrefUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,16 +28,16 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 import yahoofinance.quotes.stock.StockQuote;
 
-import static com.udacity.stockhawk.Utils.isNetworkAvailable;
+import static es.javimar.stockhawk.Utils.isNetworkAvailable;
 
 public final class QuoteSyncJob
 {
     private static final int ONE_OFF_ID = 2;
-    public static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
-    private static final int PERIOD = 300000;
+    public static final String ACTION_DATA_UPDATED = "es.javimar.stockhawk.ACTION_DATA_UPDATED";
+    private static final int PERIOD = 300000;  // 5 minutes
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
-    private static final int YEARS_OF_HISTORY = 1;
+    private static final int YEARS_OF_HISTORY = 1; // set to 1 only
 
     private QuoteSyncJob() {}
 
@@ -45,7 +45,7 @@ public final class QuoteSyncJob
     {
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
-        // get quote from 2 years of history
+        // get quote from 1 year of history
         from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
 
         try
@@ -99,16 +99,21 @@ public final class QuoteSyncJob
                         historyBuilder.append(it.getClose());
                         historyBuilder.append("\n");
                     }
-
                     ContentValues quoteCV = new ContentValues();
                     quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
                     quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
                     quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
                     quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-
                     quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
-
                     quoteCV.put(Contract.Quote.COLUMN_NAME, stock_name);
+
+                    quoteCV.put(Contract.Quote.COLUMN_STOCKEXCHANGE, stock.getStockExchange());
+                    quoteCV.put(Contract.Quote.COLUMN_PREVCLOSE,
+                            String.valueOf(quote.getPreviousClose()));
+                    quoteCV.put(Contract.Quote.COLUMN_BID, String.valueOf(quote.getBid()));
+                    quoteCV.put(Contract.Quote.COLUMN_YIELD,
+                            String.valueOf((stock.getDividend().getAnnualYieldPercent())));
+                    quoteCV.put(Contract.Quote.COLUMN_OPEN, String.valueOf(quote.getOpen()));
 
                     quoteCVs.add(quoteCV);
                 }

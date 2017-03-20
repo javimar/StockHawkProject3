@@ -1,8 +1,8 @@
-package com.udacity.stockhawk;
+package es.javimar.stockhawk;
 
 import android.app.Application;
-
 import timber.log.Timber;
+
 
 public class StockHawkApp extends Application
 {

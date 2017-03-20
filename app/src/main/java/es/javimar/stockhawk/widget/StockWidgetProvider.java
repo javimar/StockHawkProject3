@@ -1,4 +1,4 @@
-package com.udacity.stockhawk.widget;
+package es.javimar.stockhawk.widget;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -12,10 +12,10 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
-import com.udacity.stockhawk.R;
-import com.udacity.stockhawk.sync.QuoteSyncJob;
-import com.udacity.stockhawk.ui.DetailActivity;
-import com.udacity.stockhawk.ui.MainActivity;
+import es.javimar.stockhawk.R;
+import es.javimar.stockhawk.sync.QuoteSyncJob;
+import es.javimar.stockhawk.ui.DetailActivity;
+import es.javimar.stockhawk.ui.MainActivity;
 
 
 public class StockWidgetProvider extends AppWidgetProvider
@@ -36,15 +36,9 @@ public class StockWidgetProvider extends AppWidgetProvider
             views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
             // Set up the collection
-
             setRemoteAdapter(context, views);
 
-            boolean useDetailActivity = context.getResources()
-                    .getBoolean(R.bool.use_detail_activity);
-            Intent clickIntentTemplate = useDetailActivity
-                    ? new Intent(context, DetailActivity.class)
-                    : new Intent(context, MainActivity.class);
-
+            Intent clickIntentTemplate = new Intent(context, DetailActivity.class);
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -63,8 +57,8 @@ public class StockWidgetProvider extends AppWidgetProvider
         if (QuoteSyncJob.ACTION_DATA_UPDATED.equals(intent.getAction()))
         {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
-                    new ComponentName(context, getClass()));
+            int[] appWidgetIds = appWidgetManager
+                    .getAppWidgetIds(new ComponentName(context, getClass()));
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
         }
     }
@@ -75,7 +69,8 @@ public class StockWidgetProvider extends AppWidgetProvider
      * @param views RemoteViews to set the RemoteAdapter
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
+    private void setRemoteAdapter(Context context, @NonNull final RemoteViews views)
+    {
         views.setRemoteAdapter(R.id.widget_list,
                 new Intent(context, StockWidgetRemoteViewsService.class));
     }

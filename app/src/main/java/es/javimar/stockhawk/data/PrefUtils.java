@@ -1,18 +1,18 @@
-package com.udacity.stockhawk.data;
+package es.javimar.stockhawk.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.udacity.stockhawk.R;
+import es.javimar.stockhawk.R;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.udacity.stockhawk.Utils.isNetworkAvailable;
-import static com.udacity.stockhawk.Utils.isValidStock;
+import static es.javimar.stockhawk.Utils.isNetworkAvailable;
+import static es.javimar.stockhawk.Utils.isValidStock;
 
 public final class PrefUtils
 {

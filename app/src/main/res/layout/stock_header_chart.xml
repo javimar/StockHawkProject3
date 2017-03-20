@@ -1,14 +1,32 @@
 <!-- Detail Layout for Grid -->
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tv_chart_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"
+        app:layout_gravity="fill_horizontal"
+        android:text="@string/char_title_oneyear"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/stockChart"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_height="320dp"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/tv_chart_title"
+        android:layout_marginBottom="16dp"/>
 
-</FrameLayout>
+</RelativeLayout>
 

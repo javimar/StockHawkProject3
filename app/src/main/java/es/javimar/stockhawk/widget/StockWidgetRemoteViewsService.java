@@ -1,29 +1,26 @@
-package com.udacity.stockhawk.widget;
+package es.javimar.stockhawk.widget;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Binder;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.udacity.stockhawk.R;
-import com.udacity.stockhawk.data.Contract.Quote;
+import es.javimar.stockhawk.R;
+import es.javimar.stockhawk.data.Contract.Quote;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import static com.udacity.stockhawk.data.Contract.Quote.makeUriForStock;
+import static es.javimar.stockhawk.data.Contract.Quote.makeUriForStock;
 
 
 public class StockWidgetRemoteViewsService extends RemoteViewsService
 {
-    public static final String LOG_TAG = StockWidgetRemoteViewsService.class.getSimpleName();
-
     private static final String[] STOCK_COLUMNS = {
             Quote.TABLE_NAME + "." + Quote._ID,
             Quote.COLUMN_SYMBOL,
@@ -35,7 +32,7 @@ public class StockWidgetRemoteViewsService extends RemoteViewsService
     static final int INDEX_STOCK_ID = 0;
     static final int INDEX_STOCK_SYMBOL = 1;
     static final int INDEX_STOCK_PRICE = 2;
-    static final int INDEX_STOCK_ABS_CHANGE = 3;
+    //static final int INDEX_STOCK_ABS_CHANGE = 3;
     static final int INDEX_STOCK_PERC_CHANGE = 4;
 
 
@@ -133,8 +130,8 @@ public class StockWidgetRemoteViewsService extends RemoteViewsService
                 }
 
                 final Intent fillInIntent = new Intent();
-                //Uri uri = makeUriForStock(symbol);
-                Uri uri = Quote.URI;
+                Uri uri = makeUriForStock(symbol);
+                //Uri uri = Quote.URI;
                 fillInIntent.setData(uri);
                 views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
                 return views;
