@@ -1,13 +1,15 @@
-<!-- Detail Layout for Grid -->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_additional_pane"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white">
+    android:background="@color/material_grey_200"
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/tv_chart_title"
+        android:id="@+id/tv_stock_exchange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
@@ -15,18 +17,89 @@
         android:textColor="@color/primary_text"
         android:textSize="16sp"
         app:layout_gravity="fill_horizontal"
-        android:text="@string/char_title_oneyear"
-        android:layout_marginTop="16dp"
-        android:textStyle="bold"
+        tools:text="Market: NASDAQ"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/stockChart"
-        android:layout_height="320dp"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/tv_chart_title"
-        android:layout_marginBottom="16dp"/>
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/primary_text"
+        android:textSize="40sp"
+        app:layout_gravity="fill_horizontal"
+        tools:text="$933.31"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/tv_stock_exchange"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:id="@+id/tv_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="+0.20 (+2,23%)"
+        android:layout_below="@+id/tv_price"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/tv_prev_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Prev. close: 35.95"
+        android:layout_above="@+id/tv_price"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/tv_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Open: 24,75"
+        android:layout_alignTop="@+id/tv_price"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/tv_bid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Bid: 34.95"
+        android:layout_alignBottom="@+id/tv_price"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/tv_annual_yield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="start"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Annual Yield: +2,23%"
+        android:layout_alignBaseline="@+id/tv_change"
+        android:layout_alignBottom="@+id/tv_change"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
 

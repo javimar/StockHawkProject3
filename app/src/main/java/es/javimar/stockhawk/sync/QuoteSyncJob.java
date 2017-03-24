@@ -60,7 +60,7 @@ public final class QuoteSyncJob
                 return;
             }
 
-            /**
+            /*
              * Sends a basic quotes request to Yahoo Finance. This will return a Map object
              * that links the symbols to their respective Stock objects. The Stock objects
              * have their StockQuote, StockStats and StockDividend member fields filled in

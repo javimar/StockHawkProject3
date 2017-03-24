@@ -17,8 +17,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import static es.javimar.stockhawk.data.Contract.Quote.makeUriForStock;
-
 
 public class StockWidgetRemoteViewsService extends RemoteViewsService
 {
@@ -33,7 +31,6 @@ public class StockWidgetRemoteViewsService extends RemoteViewsService
     static final int INDEX_STOCK_ID = 0;
     static final int INDEX_STOCK_SYMBOL = 1;
     static final int INDEX_STOCK_PRICE = 2;
-    //static final int INDEX_STOCK_ABS_CHANGE = 3;
     static final int INDEX_STOCK_PERC_CHANGE = 4;
 
 

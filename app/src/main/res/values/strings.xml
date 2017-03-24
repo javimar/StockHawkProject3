@@ -27,6 +27,7 @@
     <string name="error_no_stocks">No stocks added! Hit the floating action button to add one.</string>
     <string name="error_nonvalid_stock">Symbol %s is not a valid stock!</string>
     <string name="error_nonvalid_stock_async">Symbol %s was not a valid stock! It was deleted</string>
+    <string name="error_nonvalid_chars">Characters not allowed, please use only letters A-Z</string>
 
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>

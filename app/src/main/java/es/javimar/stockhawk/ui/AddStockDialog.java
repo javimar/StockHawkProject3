@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import es.javimar.stockhawk.R;
 
@@ -66,11 +71,24 @@ public class AddStockDialog extends DialogFragment
     private void addStock()
     {
         Activity parent = getActivity();
-        if (parent instanceof MainActivity) {
-            ((MainActivity) parent).addStock(stock.getText().toString());
+        if (parent instanceof MainActivity)
+        {
+            String alpha = stock.getText().toString().trim();
+            if(isAlpha(alpha))
+                ((MainActivity) parent).addStock(alpha);
+            else
+                Toast.makeText(parent, getString(R.string.error_nonvalid_chars),
+                        Toast.LENGTH_LONG).show();
         }
         dismissAllowingStateLoss();
     }
 
+
+    private boolean isAlpha(String stock)
+    {
+        Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
+        Matcher matcher = pattern.matcher(stock);
+        return matcher.matches();
+    }
 
 }
